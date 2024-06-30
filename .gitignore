@@ -27,4 +27,4 @@ terraform.rc
 
 
 # Ignore remote state files
-remote-state/terraform.tfstate
+terraform.tfstate
