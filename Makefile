@@ -16,3 +16,16 @@ get_client_id:
 
 create_sp:
 	az ad sp create-for-rbac --name ${AZURE_APP} --query password -o tsv
+
+
+state-init:
+	bash -c 'cd remote-state && \
+    terraform init -backend-config=../backend.auto.tfvars'
+
+state-apply:
+	bash -c 'cd remote-state && \
+    terraform apply -var-file=../backend.auto.tfvars'
+
+state-destroy:
+	bash -c 'cd remote-state && \
+    terraform destroy -var-file=../backend.auto.tfvars'
