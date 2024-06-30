@@ -52,6 +52,7 @@ jobs:
         id: fmt
         run: terraform fmt -check
 
+      # Validates the Terraform files
       - name: Terraform Validate
         id: validate
         run: terraform validate
@@ -82,25 +83,25 @@ jobs:
 
       # Create string output of Terraform Plan
       - name: Create String Output
-        uses: actions/github-script@v7
         id: tf-plan-string
-        env:
-          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
-        with:
-          script: |
-            #### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
-            #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
-            #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
-            #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
-            
-            <details><summary>Show Plan</summary>
-            
-            \`\`\`\n
-            ${process.env.PLAN}
-            \`\`\`
-            
-            </details>
-            *Pushed by: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
+        run: |
+          TERRAFORM_PLAN=$(terraform show -no-color tfplan)
+          
+          delimiter="$(openssl rand -hex 8)"
+          
+          echo "summary<<${delimiter}" >> $GITHUB_OUTPUT
+          echo "## Terraform Plan Output" >> $GITHUB_OUTPUT
+          echo "#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`"  >> $GITHUB_OUTPUT
+          echo "#### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`" >> $GITHUB_OUTPUT
+          echo "#### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`"  >> $GITHUB_OUTPUT
+          echo "#### Terraform Plan 📖\`${{ steps.plan.outcome }}\`"  >> $GITHUB_OUTPUT
+          echo "<details><summary>Click to expand</summary>" >> $GITHUB_OUTPUT
+          echo "" >> $GITHUB_OUTPUT
+          echo '```terraform' >> $GITHUB_OUTPUT
+          echo "$TERRAFORM_PLAN" >> $GITHUB_OUTPUT
+          echo '```' >> $GITHUB_OUTPUT
+          echo "</details>" >> $GITHUB_OUTPUT
+          echo "${delimiter}" >> $GITHUB_OUTPUT
 
       # Publish Terraform Plan as task summary
       - name: Publish Terraform Plan to Task Summary
