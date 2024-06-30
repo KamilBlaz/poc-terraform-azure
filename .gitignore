@@ -28,3 +28,4 @@ terraform.rc
 
 # Ignore remote state files
 terraform.tfstate
+!backend.auto.tfvars
