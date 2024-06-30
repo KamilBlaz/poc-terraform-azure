@@ -24,3 +24,7 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+
+
+# Ignore remote state files
+remote-state/terraform.tfstate
