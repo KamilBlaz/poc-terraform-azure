@@ -43,12 +43,18 @@ jobs:
 
       # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
       - name: Terraform Init
+        id: init
         run: terraform init
 
       # Checks that all Terraform configuration files adhere to a canonical format
       # Will fail the build if not
       - name: Terraform Format
+        id: fmt
         run: terraform fmt -check
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate
 
       # Generates an execution plan for Terraform
       # An exit code of 0 indicated no changes, 1 a terraform failure, 2 there are pending changes.
@@ -77,19 +83,22 @@ jobs:
       # Create string output of Terraform Plan
       - name: Create String Output
         id: tf-plan-string
+        env:
+          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
         run: |
-          TERRAFORM_PLAN=$(terraform show -no-color tfplan)
+          const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+           #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+           #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
+           #### Terraform Plan 📖\`${{ steps.tf-plan.outcome }}\`
           
-          delimiter="$(openssl rand -hex 8)"
-          echo "summary<<${delimiter}" >> $GITHUB_OUTPUT
-          echo "## Terraform Plan Output" >> $GITHUB_OUTPUT
-          echo "<details><summary>Click to expand</summary>" >> $GITHUB_OUTPUT
-          echo "" >> $GITHUB_OUTPUT
-          echo '```terraform' >> $GITHUB_OUTPUT
-          echo "$TERRAFORM_PLAN" >> $GITHUB_OUTPUT
-          echo '```' >> $GITHUB_OUTPUT
-          echo "</details>" >> $GITHUB_OUTPUT
-          echo "${delimiter}" >> $GITHUB_OUTPUT
+           <details><summary>Show Plan</summary>
+          
+           \`\`\`\n
+           ${process.env.PLAN}
+           \`\`\`
+          
+           </details>
+          
 
       # Publish Terraform Plan as task summary
       - name: Publish Terraform Plan to Task Summary
