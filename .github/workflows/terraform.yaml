@@ -94,7 +94,7 @@ jobs:
           echo "#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`"  >> $GITHUB_OUTPUT
           echo "#### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`" >> $GITHUB_OUTPUT
           echo "#### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`"  >> $GITHUB_OUTPUT
-          echo "#### Terraform Plan 📖\`${{ steps.plan.outcome }}\`"  >> $GITHUB_OUTPUT
+          echo "#### Terraform Plan 📖\`${{ steps.tf-plan.outcome }}\`"  >> $GITHUB_OUTPUT
           echo "<details><summary>Click to expand</summary>" >> $GITHUB_OUTPUT
           echo "" >> $GITHUB_OUTPUT
           echo '```terraform' >> $GITHUB_OUTPUT
