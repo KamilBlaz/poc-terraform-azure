@@ -1,7 +1,6 @@
 environment          = "dev"
-region               = "northeurope"
+region               = "westeurope"
 resource_group_name  = "tfstate"
-storage_account_name = "tfstatedev12345"
+storage_account_name = "tfstatedevtest35"
 container_name       = "tfstate"
-project_name         = "terraform-azurerm-remote-state"
-
+project_name         = "ForTech"

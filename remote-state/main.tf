@@ -1,27 +1,3 @@
-variable "resource_group_name" {
-  type = string
-}
-
-variable "storage_account_name" {
-  type = string
-}
-
-variable "container_name" {
-  type = string
-}
-
-variable "project_name" {
-  type = string
-}
-
-variable "environment" {
-  type = string
-}
-
-variable "region" {
-  type = string
-}
-
 module "remote_state" {
   source               = "./blob-storage-remote-state"
   project_name         = var.project_name
@@ -30,6 +6,10 @@ module "remote_state" {
   resource_group_name  = var.resource_group_name
   storage_account_name = var.storage_account_name
   container_name       = var.container_name
+#  subscription_id = var.subscription_id
+#  client_id = var.client_id
+#  client_secret = var.client_secret
+#  tenant_id = var.tenant_id
 }
 
 output "storage_name" {
